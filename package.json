@@ -1,0 +1,28 @@
+{
+  "name": "crocoder-jobboard-action",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidAbram/crocoder-jobboard-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DavidAbram/crocoder-jobboard-action/issues"
+  },
+  "homepage": "https://github.com/DavidAbram/crocoder-jobboard-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@octokit/rest": "^18.0.6"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.24.1"
+  }
+}
