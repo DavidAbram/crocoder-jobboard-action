@@ -57,7 +57,7 @@ const fetch = require("node-fetch");
         repo,
         title,
         head: branch,
-        base: 'development',
+        base: startingBranch,
         body: `
           ${title}
           ${new Date(datetime)}
