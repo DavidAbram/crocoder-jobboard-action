@@ -61,7 +61,7 @@ const { Octokit } = __webpack_require__(375);
       await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', branch ]);
 
 
-      const { number } = await octokit.pulls.create({
+      const response = await octokit.pulls.create({
         owner,
         repo,
         title,
@@ -83,6 +83,8 @@ Content formatted correctly | ✔️ / ❌ |
         draft: true,
         maintainer_can_modify: true,
       });
+
+      const { number } = response.data;
 
       console.log('New issue number:', number);
       await octokit.issues.addAssignees({
