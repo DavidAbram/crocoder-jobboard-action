@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { exec } = require('@actions/exec');
 const { Octokit } = require("@octokit/rest");
+const fetch = require("node-fetch");
 
 
 (async () => {
@@ -14,6 +15,9 @@ const { Octokit } = require("@octokit/rest");
     const commitMessage = core.getInput('commit-message');
     const githubToken = core.getInput('github-token');
 
+    const jobBoardApiUrl = core.getInput('jobboard-api');
+    const jobBoardApiToken= core.getInput('jobboard-token');
+
     const octokit = new Octokit({
       auth: githubToken,
     });
@@ -23,16 +27,26 @@ const { Octokit } = require("@octokit/rest");
 
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
 
-    files.foreach(file => {
-      const { name, title, datetime, content }  = file;
+    const result = await fetch(jobBoardApiUrl, {
+      "method": "GET",
+      "headers": {
+        "authorization": jobBoardApiToken,
+      }
+    });
 
-      const branch = `${branchPrefix}/${title}`;
+    const jobs = await result.json(); 
+
+    jobs.foreach(job => {
+
+      const { title, jobPostMarkdown, jobPostFilename, titleCompany } = job;
+
+      const branch = `${branchPrefix}/${titleCompany}`;
       const fullCommitMessage = `${commitMessage} ${title}`;
 
       await exec('git', [ '-C', workingDirectory, 'branch', branch]);
       await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
 
-      await exec('echo', [ content, '>' `${workingDirectory}/${name}`]);
+      await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/website/content/${jobPostFilename}`]);
       
       await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
       await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
