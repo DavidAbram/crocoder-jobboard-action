@@ -7,7 +7,6 @@ const fetch = require("node-fetch");
 (async () => {
   try {
     
-    const files = core.getInput('files');
     const workingDirectory = core.getInput('working-directory');
     const authorName = core.getInput('author-name');
     const authorEmail = core.getInput('author-email');
