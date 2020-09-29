@@ -14,7 +14,7 @@ const fetch = require("node-fetch");
     const commitMessage = core.getInput('commit-message');
     const githubToken = core.getInput('github-token');
     const pathToContentFolder = core.getInput('content-folder-path');
-
+    const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken= core.getInput('jobboard-token');
 
@@ -67,7 +67,7 @@ const fetch = require("node-fetch");
       });
 
 
-      await exec('git', [ '-C', workingDirectory, 'checkout', 'master']);
+      await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
     
     });
   } catch (error) {

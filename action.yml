@@ -9,6 +9,10 @@ inputs:
     description: 'Path to content folder'
     required: false
     default: 'packages/jobboard/website/content'
+  startingBranch:
+    description: 'Starting branch'
+    required: false
+    default: master
   author-name:
     description: 'Name of the user that creates PRs.'
     required: true
