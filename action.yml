@@ -9,7 +9,7 @@ inputs:
     description: 'Path to content folder'
     required: false
     default: 'packages/jobboard/website/content'
-  startingBranch:
+  starting-branch:
     description: 'Starting branch'
     required: false
     default: master
