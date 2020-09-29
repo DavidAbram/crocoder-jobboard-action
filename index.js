@@ -6,7 +6,7 @@ const fetch = require("node-fetch");
 
 (async () => {
   try {
-    
+
     const workingDirectory = core.getInput('working-directory');
     const authorName = core.getInput('author-name');
     const authorEmail = core.getInput('author-email');
@@ -66,7 +66,7 @@ const fetch = require("node-fetch");
       });
 
 
-      await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
+      await exec('git', [ '-C', workingDirectory, 'checkout', 'master']);
     
     });
   } catch (error) {
