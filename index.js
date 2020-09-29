@@ -18,9 +18,10 @@ const fetch = require("node-fetch");
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken= core.getInput('jobboard-token');
 
-    const octokit = new Octokit({
+    /*const octokit = new Octokit({
       auth: githubToken,
-    });
+    });*/
+    await exec('ls', ['status']);
     await exec('git', ['status']);
     /*await exec('git', [ 'config', '--global', 'user.name', authorName ])
     await exec('git', [ 'config', '--global', 'user.email', authorEmail ])
