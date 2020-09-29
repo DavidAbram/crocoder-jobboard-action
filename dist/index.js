@@ -68,7 +68,6 @@ const { Octokit } = __webpack_require__(375);
         base: startingBranch,
         body: `
           ${title}
-          ${new Date(datetime)}
         `,
         draft: true,
         maintainer_can_modify: true,

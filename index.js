@@ -61,7 +61,6 @@ const { Octokit } = require("@octokit/rest");
         base: startingBranch,
         body: `
           ${title}
-          ${new Date(datetime)}
         `,
         draft: true,
         maintainer_can_modify: true,
