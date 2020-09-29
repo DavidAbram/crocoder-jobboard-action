@@ -64,7 +64,8 @@ const { Octokit } = require("@octokit/rest");
 # ${title}
 ### ${hashtags.join(' ')}
         
-Dear CroCoder devs please use the table to evaluate the job ad.
+Dear CroCoder devs please use the table to evaluate the job ad.  
+If you made any changes to the content of md file, please add a comment to the relevent row.
         
 Task | Evaluation | Comment
 ------------ | ------------- | ------------- 
@@ -72,21 +73,13 @@ Relevant job post | ✔️ / ❌ |
 Readable title | ✔️ / ❌ |
 Relevant hashtags | ✔️ / ❌ |
 Content formatted correctly | ✔️ / ❌ |
+Links are not broken | ✔️ / ❌ |
         `,
         draft: true,
         maintainer_can_modify: true,
       });
 
       const { number } = response.data;
-
-      console.log('New issue number:', number);
-      await octokit.issues.addAssignees({
-        owner,
-        repo,
-        issue_number: number,
-        assignees: assignees.split[','],
-      });
-
 
       await octokit.issues.setLabels({
         owner,
