@@ -11,6 +11,7 @@ const { exec } = __webpack_require__(514);
 (async () => {
   try {
     await exec('ls');
+    await exec('git', ['status']);
   } catch (error) {
     console.log(error.message);
     core.setFailed(error.message)
