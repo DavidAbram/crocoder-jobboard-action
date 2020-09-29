@@ -37,7 +37,41 @@ const fetch = __webpack_require__(467);
 
     const jobs = await result.json();
 
-    console.log(jobs);
+    const octokit = new Octokit({
+      auth: githubToken,
+    });
+
+    await Promise.all(jobs.map(async job => {
+
+      const { title, jobPostMarkdown, jobPostFilename, titleCompany } = job;
+
+      const branch = `${branchPrefix}/${titleCompany}`;
+      const fullCommitMessage = `${commitMessage} ${title}`;
+
+      await exec('git', [ '-C', workingDirectory, 'branch', branch]);
+      await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
+
+      await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
+      
+      await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
+      await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
+
+
+      await octokit.pulls.create({
+        owner,
+        repo,
+        title,
+        head: branch,
+        base: startingBranch,
+        body: `
+          ${title}
+          ${new Date(datetime)}
+        `,
+        draft: true,
+        maintainer_can_modify: true,
+      });
+      await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
+    }));
 
   } catch (error) {
     console.log(error.message);
