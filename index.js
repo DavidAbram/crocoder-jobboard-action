@@ -16,7 +16,6 @@ const { Octokit } = require("@octokit/rest");
     const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken = core.getInput('jobboard-token');
-    const assignees = core.getInput('pr-assignees') 
     
     
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
