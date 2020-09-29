@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const { exec } = require('@actions/exec');
 const fetch = require("node-fetch");
+const { Octokit } = require("@octokit/rest");
 
 (async () => {
   try {
