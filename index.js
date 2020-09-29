@@ -21,8 +21,8 @@ const fetch = require("node-fetch");
     const octokit = new Octokit({
       auth: githubToken,
     });
-    
-    await exec('git', [ 'config', '--global', 'user.name', authorName ])
+    await exec('git', ['status']);
+    /*await exec('git', [ 'config', '--global', 'user.name', authorName ])
     await exec('git', [ 'config', '--global', 'user.email', authorEmail ])
 
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
@@ -71,7 +71,7 @@ const fetch = require("node-fetch");
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
     
-    });
+    });*/
   } catch (error) {
     core.setFailed(error.message)
   }
