@@ -55,7 +55,7 @@ const { Octokit } = __webpack_require__(375);
       
       await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
       await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
-      await exec('git', [ '-C', workingDirectory, 'push' ]);
+      await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', branch ]);
 
 
       /*await octokit.pulls.create({
