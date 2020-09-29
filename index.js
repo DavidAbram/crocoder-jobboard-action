@@ -22,8 +22,8 @@ const fetch = require("node-fetch");
       auth: githubToken,
     });
     
-    await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.name', authorName ])
-    await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ])
+    await exec('git', [ 'config', '--local', 'user.name', authorName ])
+    await exec('git', [ 'config', '--local', 'user.email', authorEmail ])
 
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
 
@@ -43,13 +43,13 @@ const fetch = require("node-fetch");
       const branch = `${branchPrefix}/${titleCompany}`;
       const fullCommitMessage = `${commitMessage} ${title}`;
 
-      await exec('git', [ '-C', workingDirectory, 'branch', branch]);
-      await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
+      await exec('git', [ 'branch', branch]);
+      await exec('git', [ 'checkout', branch]);
 
       await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
       
-      await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
-      await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
+      await exec('git', [ 'add', '-A' ]);
+      await exec('git', [ 'commit', '--no-verify', '-m', fullCommitMessage ]);
 
 
       await octokit.pulls.create({
