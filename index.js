@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const { exec } = require('@actions/exec');
+const exec = require('@actions/exec');
 const { Octokit } = require("@octokit/rest");
 const fetch = require("node-fetch");
 
