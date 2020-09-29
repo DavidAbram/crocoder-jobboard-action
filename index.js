@@ -17,7 +17,9 @@ const { Octokit } = require("@octokit/rest");
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken= core.getInput('jobboard-token');
     
-    await exec('ls');
+    
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+
     await exec('git', [ '-C', workingDirectory, 'status']);
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.name', authorName ])
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ])
@@ -51,7 +53,7 @@ const { Octokit } = require("@octokit/rest");
       await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', branch ]);
 
 
-      /*await octokit.pulls.create({
+      await octokit.pulls.create({
         owner,
         repo,
         title,
@@ -63,7 +65,7 @@ const { Octokit } = require("@octokit/rest");
         `,
         draft: true,
         maintainer_can_modify: true,
-      });*/
+      });
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
     }
