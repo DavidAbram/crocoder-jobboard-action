@@ -48,6 +48,8 @@ const fetch = require("node-fetch");
 
       await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
       
+      await exec('ls', [`./${pathToContentFolder}`]);
+
       await exec('git', [ 'add', '-A' ]);
       await exec('git', [ 'commit', '--no-verify', '-m', fullCommitMessage ]);
 
