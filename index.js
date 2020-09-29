@@ -22,8 +22,8 @@ const fetch = require("node-fetch");
       auth: githubToken,
     });
     
-    await exec('git', [ 'config', '--local', 'user.name', authorName ])
-    await exec('git', [ 'config', '--local', 'user.email', authorEmail ])
+    await exec('git', [ 'config', '--global', 'user.name', authorName ])
+    await exec('git', [ 'config', '--global', 'user.email', authorEmail ])
 
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
 
