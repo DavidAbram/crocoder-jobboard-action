@@ -48,6 +48,7 @@ const { Octokit } = require("@octokit/rest");
       
       await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
       await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
+      await exec('git', [ '-C', workingDirectory, 'push' ]);
 
 
       /*await octokit.pulls.create({
