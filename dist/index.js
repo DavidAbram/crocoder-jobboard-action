@@ -42,9 +42,8 @@ const { Octokit } = __webpack_require__(375);
       auth: githubToken,
     });
 
-    await Promise.all(jobs.map(async job => {
-
-      const { title, jobPostMarkdown, jobPostFilename, titleCompany } = job;
+    for (let index = 0; index < jobs.length; index++) {
+      const { title, jobPostMarkdown, jobPostFilename, titleCompany } = jobs[index];
 
       const branch = `${branchPrefix}/${titleCompany}`;
       const fullCommitMessage = `${commitMessage} ${title}`;
@@ -52,13 +51,13 @@ const { Octokit } = __webpack_require__(375);
       await exec('git', [ '-C', workingDirectory, 'branch', branch]);
       await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
 
-      await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
+      await exec('curl', [ jobPostMarkdown, '-o' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
       
       await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
       await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
 
 
-      await octokit.pulls.create({
+      /*await octokit.pulls.create({
         owner,
         repo,
         title,
@@ -70,10 +69,10 @@ const { Octokit } = __webpack_require__(375);
         `,
         draft: true,
         maintainer_can_modify: true,
-      });
-      await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
-    }));
+      });*/
 
+      await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
+    }
   } catch (error) {
     console.log(error.message);
     core.setFailed(error.message)
