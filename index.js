@@ -44,7 +44,7 @@ const { Octokit } = require("@octokit/rest");
       await exec('git', [ '-C', workingDirectory, 'branch', branch]);
       await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
 
-      await exec('curl', [ jobPostMarkdown, '-o' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
+      await exec('bash', [ '-c', `curl ${jobPostMarkdown} -o ${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
       
       await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
       await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
