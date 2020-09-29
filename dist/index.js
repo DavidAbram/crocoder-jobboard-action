@@ -99,7 +99,7 @@ Content formatted correctly | ✔️ / ❌ |
         owner,
         repo,
         issue_number: number,
-        lables: ['NEW JOBS'],
+        labels: ['NEW JOBS'],
       });
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
