@@ -84,7 +84,7 @@ Content formatted correctly | ✔️ / ❌ |
         maintainer_can_modify: true,
       });
 
-
+      console.log('New issue number:', number);
       await octokit.issues.addAssignees({
         owner,
         repo,
