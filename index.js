@@ -17,62 +17,8 @@ const fetch = require("node-fetch");
     const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken= core.getInput('jobboard-token');
-
-    /*const octokit = new Octokit({
-      auth: githubToken,
-    });*/
-    await exec('ls', ['status']);
-    await exec('git', ['status']);
-    /*await exec('git', [ 'config', '--global', 'user.name', authorName ])
-    await exec('git', [ 'config', '--global', 'user.email', authorEmail ])
-
-    const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
-
-    const result = await fetch(jobBoardApiUrl, {
-      "method": "GET",
-      "headers": {
-        "authorization": jobBoardApiToken,
-      }
-    });
-
-    const jobs = await result.json(); 
-
-    jobs.foreach(job => {
-
-      const { title, jobPostMarkdown, jobPostFilename, titleCompany } = job;
-
-      const branch = `${branchPrefix}/${titleCompany}`;
-      const fullCommitMessage = `${commitMessage} ${title}`;
-
-      await exec('git', [ 'branch', branch]);
-      await exec('git', [ 'checkout', branch]);
-
-      await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
-      
-      await exec('ls', [`./${pathToContentFolder}`]);
-
-      await exec('git', [ 'add', '-A' ]);
-      await exec('git', [ 'commit', '--no-verify', '-m', fullCommitMessage ]);
-
-
-      await octokit.pulls.create({
-        owner,
-        repo,
-        title,
-        head: branch,
-        base: startingBranch,
-        body: `
-          ${title}
-          ${new Date(datetime)}
-        `,
-        draft: true,
-        maintainer_can_modify: true,
-      });
-
-
-      await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
     
-    });*/
+    await exec('ls', ['status']);
   } catch (error) {
     core.setFailed(error.message)
   }
