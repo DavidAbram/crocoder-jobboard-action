@@ -15,7 +15,8 @@ const { Octokit } = require("@octokit/rest");
     const pathToContentFolder = core.getInput('content-folder-path');
     const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
-    const jobBoardApiToken= core.getInput('jobboard-token');
+    const jobBoardApiToken = core.getInput('jobboard-token');
+    const assignees = core.getInput('pr-assignees') 
     
     
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
@@ -38,7 +39,7 @@ const { Octokit } = require("@octokit/rest");
     });
 
     for (let index = 0; index < jobs.length; index++) {
-      const { title, jobPostMarkdown, jobPostFilename, titleCompany } = jobs[index];
+      const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = jobs[index];
 
       const branch = `${branchPrefix}/${titleCompany}`;
       const fullCommitMessage = `${commitMessage} ${title}`;
@@ -53,17 +54,43 @@ const { Octokit } = require("@octokit/rest");
       await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', branch ]);
 
 
-      await octokit.pulls.create({
+      const { number } = await octokit.pulls.create({
         owner,
         repo,
         title,
         head: branch,
         base: startingBranch,
         body: `
-          ${title}
+# ${title}
+### ${hashtags.join(' ')}
+        
+Dear CroCoder devs please use the table to evaluate the job ad.
+        
+Task | Evaluation | Comment
+------------ | ------------- | ------------- 
+Relevant job post | ✔️ / ❌ |
+Readable title | ✔️ / ❌ |
+Relevant hashtags | ✔️ / ❌ |
+Content formatted correctly | ✔️ / ❌ |
         `,
         draft: true,
         maintainer_can_modify: true,
+      });
+
+
+      await octokit.issues.addAssignees({
+        owner,
+        repo,
+        issue_number: number,
+        assignees: assignees.split[','],
+      });
+
+
+      await octokit.issues.setLabels({
+        owner,
+        repo,
+        issue_number: number,
+        lables: ['NEW JOBS'],
       });
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 

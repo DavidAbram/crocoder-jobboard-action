@@ -13,6 +13,9 @@ inputs:
     description: 'Starting branch'
     required: false
     default: master
+  pr-assignees:
+    description: Assignee list seperated by a comma.
+    required: true
   author-name:
     description: 'Name of the user that creates PRs.'
     required: true
