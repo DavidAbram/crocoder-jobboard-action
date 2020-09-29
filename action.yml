@@ -5,6 +5,10 @@ inputs:
     description: 'Root directory'
     required: false
     default: '.'
+  content-folder-path:
+    description: 'Path to content folder'
+    required: false
+    default: 'packages/jobboard/website/content'
   author-name:
     description: 'Name of the user that creates PRs.'
     required: true

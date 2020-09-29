@@ -13,6 +13,7 @@ const fetch = require("node-fetch");
     const branchPrefix = core.getInput('branch-prefix');
     const commitMessage = core.getInput('commit-message');
     const githubToken = core.getInput('github-token');
+    const pathToContentFolder = core.getInput('content-folder-path');
 
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken= core.getInput('jobboard-token');
@@ -45,7 +46,7 @@ const fetch = require("node-fetch");
       await exec('git', [ '-C', workingDirectory, 'branch', branch]);
       await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
 
-      await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/website/content/${jobPostFilename}`]);
+      await exec('curl', [ jobPostMarkdown, '>' `${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
       
       await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
       await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
