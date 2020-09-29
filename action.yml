@@ -1,0 +1,36 @@
+name: 'CroCoder JobBoard Action'
+description: 'Action that gets new Job Posts.'
+inputs:
+  working-directory:
+    description: 'Root directory'
+    required: false
+    default: '.'
+  author-name:
+    description: 'Name of the user that creates PRs.'
+    required: true
+  author-email:
+    description: 'Email of the user that creates PRs.'
+    required: true
+  github-token:
+    description: 'Github token of the user that creates PRs.'
+    required: true
+  branch-prefix:
+    description: 'Branch prefix (prefix/)'
+    required: false
+    default: jobpost
+  commit-message:
+    description: 'Short commit message that will be prepended'
+    required: false
+    default: 'New job found:'
+  jobboard-api:
+    description: 'URL of the JobBoard API'
+    required: true
+  jobboard-token:
+    description: 'AUTH TOKEN from the JobBoard API'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: 'terminal'  
+  color: 'green'
