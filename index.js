@@ -64,7 +64,8 @@ const { Octokit } = require("@octokit/rest");
 ### ${hashtags.join(' ')}
         
 Dear CroCoder devs please use the table to evaluate the job ad.  
-If you made any changes to the content of md file, please add a comment to the relevent row.
+If you made any changes to the content of md file, please add a comment to the relevent row.  
+Check the content of the job ad [here](https://github.com/${owner}/${repo}/blob/${branchPrefix}/${titleCompany}/${pathToContentFolder}/${jobPostFilename}).
         
 Task | Evaluation | Comment
 ------------ | ------------- | ------------- 
