@@ -34,6 +34,8 @@ const { Octokit } = __webpack_require__(375);
     
     const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}`;
     
+    await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
+
     await exec('git', [ '-C', workingDirectory, 'branch', releaseBranch]);
     await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', releaseBranch ]);
 
