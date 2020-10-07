@@ -126,7 +126,7 @@ ${createdPRs.map(p => `- [${p.branch}](https://github.com/${owner}/${repo}/pull/
     
     await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
 
-    await exec('bash', [ '-c', `echo "${changelog}" > ${workingDirectory}/${pathToChangelogFolder}/release-${new Date().toISOString()}.md`]);
+    await exec('bash', [ '-c', `echo "${changelog}" > ${workingDirectory}/${pathToChangelogFolder}/release-${new Date().getTime()}.md`]);
     await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
     await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', `preparing for ${releaseBranch}` ]);
     await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', startingBranch ]);
