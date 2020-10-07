@@ -10,6 +10,7 @@ const { Octokit } = require("@octokit/rest");
     const authorName = core.getInput('author-name');
     const authorEmail = core.getInput('author-email');
     const branchPrefix = core.getInput('branch-prefix');
+    const releaseBranchPrefix = core.getInput('release-branch-prefix');
     const commitMessage = core.getInput('commit-message');
     const githubToken = core.getInput('github-token');
     const pathToContentFolder = core.getInput('content-folder-path');
@@ -21,9 +22,13 @@ const { Octokit } = require("@octokit/rest");
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
     await exec('git', [ '-C', workingDirectory, 'status']);
-    await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.name', authorName ])
-    await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ])
+    await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.name', authorName ]);
+    await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ]);
     
+    const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}`;
+    
+    await exec('git', [ '-C', workingDirectory, 'branch', releaseBranch]);
+
     const result = await fetch(jobBoardApiUrl, {
       "method": "GET",
       "headers": {
@@ -36,6 +41,8 @@ const { Octokit } = require("@octokit/rest");
     const octokit = new Octokit({
       auth: githubToken,
     });
+
+    const createdPRs = [];
 
     for (let index = 0; index < jobs.length; index++) {
       const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = jobs[index];
@@ -89,7 +96,44 @@ Links are not broken | ✔️ / ❌ |
       });
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
+
+      createdPRs.push({
+        branch,
+        number,
+      });
     }
+
+    const prMessage = createdPRs.map(p => `[${p.branch}](https://github.com/${owner}/${repo}/pull/${p.number}) | ✔️ / ❌`).join('\n');
+
+
+
+    const response = await octokit.pulls.create({
+      owner,
+      repo,
+      title: `Release ${new Date().toDateString()}`,
+      head: startingBranch,
+      base: releaseBranch,
+      body: `
+# Release ${new Date().toDateString()};
+Don't merge until next PRs are merged or closed:  
+Branch | Merged/Closed
+------------ | ------------
+${prMessage}
+      `,
+      draft: true,
+      maintainer_can_modify: true,
+    });
+
+    const { number } = response.data;
+
+    await octokit.issues.setLabels({
+      owner,
+      repo,
+      issue_number: number,
+      labels: ['RELEASE'],
+    });
+
+
   } catch (error) {
     console.log(error.message);
     core.setFailed(error.message)

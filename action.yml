@@ -26,6 +26,10 @@ inputs:
     description: 'Branch prefix (prefix/)'
     required: false
     default: jobpost
+  release-branch-prefix:
+    description: 'Release branch prefix (prefix/)'
+    required: false
+    default: release
   commit-message:
     description: 'Short commit message that will be prepended'
     required: false
