@@ -139,7 +139,7 @@ ${createdPRs.map(p => `- [${p.branch}](https://github.com/${owner}/${repo}/pull/
       head: startingBranch,
       base: releaseBranch,
       body: `
-# Release ${new Date().toDateString()};
+# Release ${new Date().toDateString()}
 Don't merge until next PRs are merged or closed:  
 Branch | Merged/Closed
 ------------ | ------------
