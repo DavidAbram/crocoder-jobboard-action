@@ -14,6 +14,7 @@ const { Octokit } = require("@octokit/rest");
     const commitMessage = core.getInput('commit-message');
     const githubToken = core.getInput('github-token');
     const pathToContentFolder = core.getInput('content-folder-path');
+    const pathToChangelogFolder = core.getInput('changelog-folder-path');
     const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken = core.getInput('jobboard-token');
@@ -25,12 +26,7 @@ const { Octokit } = require("@octokit/rest");
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.name', authorName ]);
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ]);
     
-    const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}`;
-    
     await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
-
-    await exec('git', [ '-C', workingDirectory, 'branch', releaseBranch]);
-    await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', releaseBranch ]);
 
     const result = await fetch(jobBoardApiUrl, {
       "method": "GET",
@@ -106,9 +102,23 @@ Links are not broken | ✔️ / ❌ |
       });
     }
 
+    const changelog = `
+# Release ${new Date().toDateString()};
+${createdPRs.map(p => `- [${p.branch}](https://github.com/${owner}/${repo}/pull/${p.number})`).join('\n')}
+    `;
+
     const prMessage = createdPRs.map(p => `[${p.branch}](https://github.com/${owner}/${repo}/pull/${p.number}) | ✔️ / ❌`).join('\n');
 
+    const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}`;
+    
+    await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
 
+    await exec('git', [ '-C', workingDirectory, 'branch', releaseBranch]);
+    await exec('git', [ '-C', workingDirectory, 'checkout', releaseBranch]);
+
+    await exec('bash', [ '-c', `echo "${changelog}" > ${workingDirectory}/${pathToChangelogFolder}/release-${new Date().toDateString()}.md`]);
+    await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', `preparing for ${releaseBranch}` ]);
+    await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', releaseBranch ]);
 
     const response = await octokit.pulls.create({
       owner,

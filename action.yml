@@ -9,6 +9,10 @@ inputs:
     description: 'Path to content folder'
     required: false
     default: 'packages/jobboard/website/content'
+  changelog-folder-path:
+    description: 'Path to changelog folder'
+    required: false
+    default: 'packages/jobboard/changelog'
   starting-branch:
     description: 'Starting branch'
     required: false
