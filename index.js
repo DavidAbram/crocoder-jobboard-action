@@ -35,7 +35,7 @@ const { Octokit } = require("@octokit/rest");
       }
     });
 
-    const jobs = await result.json();
+    const { published, archived } = await result.json();
 
     const octokit = new Octokit({
       auth: githubToken,
@@ -43,8 +43,8 @@ const { Octokit } = require("@octokit/rest");
 
     const createdPRs = [];
 
-    for (let index = 0; index < jobs.length; index++) {
-      const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = jobs[index];
+    for (let index = 0; index < published.length; index++) {
+      const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
 
       const branch = `${branchPrefix}/${titleCompany}`;
       const fullCommitMessage = `${commitMessage} ${title}`;
@@ -78,6 +78,8 @@ Task | Evaluation | Comment
 Relevant job post | ✔️ / ❌ |
 Readable title | ✔️ / ❌ |
 Relevant hashtags | ✔️ / ❌ |
+Relevant summary | ✔️ / ❌ |
+Correct job type | ✔️ / ❌ |
 Content formatted correctly | ✔️ / ❌ |
 Links are not broken | ✔️ / ❌ |
         `,
