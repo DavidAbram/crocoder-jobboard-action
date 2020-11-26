@@ -77,6 +77,7 @@ Task | Evaluation | Comment
 ------------ | ------------- | ------------- 
 Relevant job post | ✔️ / ❌ |
 Readable title | ✔️ / ❌ |
+Title has less than 30 letters | ✔️ / ❌ |
 Relevant hashtags | ✔️ / ❌ |
 Relevant summary | ✔️ / ❌ |
 Correct job type | ✔️ / ❌ |
