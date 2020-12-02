@@ -15,6 +15,29 @@ const nanoid = customAlphabet(
   5
 );
 
+const shuffleArray = (array) => {
+  const arrayCopy = array.slice(0);
+  return arrayCopy.sort(() => Math.random() - 0.5);
+}
+
+const createAsigneeList = (usernames, prCount) => {
+  const jobsPerUsername = split(prCount, usernames.length);
+  console.log(jobsPerUsername);
+  return shuffleArray(shuffleArray(usernames).flatMap((username, i) => Array(jobsPerUsername[i]).fill(username)));
+}
+
+const split = (number, parts) => {
+  if(number % parts === 0) {
+    return Array(parts).fill(number / parts);
+  } else {
+    const a =  number % parts;
+    const b = (number - (number % parts)) / parts;
+    return [...Array(a).fill(b+1), ...Array(parts-a).fill(b)];
+  }
+}
+
+
+
 (async () => {
   try {
 
@@ -30,6 +53,7 @@ const nanoid = customAlphabet(
     const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken = core.getInput('jobboard-token');
+    const asigneeUsernames = core.getInput('asignees');
     
     
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
@@ -54,6 +78,8 @@ const nanoid = customAlphabet(
     });
 
     const createdPRs = [];
+
+    const asignees = createAsigneeList(asigneeUsernames.split(','), published.length);
 
     for (let index = 0; index < published.length; index++) {
       const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
@@ -108,6 +134,13 @@ Changed featured if needed | ✔️ / ❌ |
         repo,
         issue_number: number,
         labels: ['NEW JOBS'],
+      });
+
+      octokit.issues.addAssignees({
+        owner,
+        repo,
+        issue_number: number,
+        asignees: [asignees[index]],
       });
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
