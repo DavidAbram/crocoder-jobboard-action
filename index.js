@@ -2,6 +2,11 @@ const core = require('@actions/core');
 const { exec } = require('@actions/exec');
 const fetch = require("node-fetch");
 const { Octokit } = require("@octokit/rest");
+const { customAlphabet } = require("nanoid");
+const nanoid = customAlphabet(
+  "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
+  5
+);
 
 (async () => {
   try {
@@ -46,7 +51,7 @@ const { Octokit } = require("@octokit/rest");
     for (let index = 0; index < published.length; index++) {
       const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
 
-      const branch = `${branchPrefix}/${titleCompany}`;
+      const branch = `${branchPrefix}/${titleCompany}-${nanoid()}`;
       const fullCommitMessage = `${commitMessage} ${title}`;
 
       await exec('git', [ '-C', workingDirectory, 'branch', branch]);
@@ -113,7 +118,7 @@ ${createdPRs.map(p => `- [${p.branch}](https://github.com/${owner}/${repo}/pull/
 
     const prMessage = createdPRs.map(p => `[${p.branch}](https://github.com/${owner}/${repo}/pull/${p.number}) | ✔️ / ❌`).join('\n');
 
-    const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}`;
+    const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
     
     await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
 
