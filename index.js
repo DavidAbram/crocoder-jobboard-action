@@ -73,7 +73,7 @@ const split = (number, parts) => {
     const createdPRs = [];
 
     const asignees = createAsigneeList(asigneeUsernames.split(','), published.length);
-
+    console.log(asigneeUsernames, asigneeUsernames.split(','), asignees);
     for (let index = 0; index < published.length; index++) {
       const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
 
@@ -128,13 +128,19 @@ Changed featured if needed | ✔️ / ❌ |
         issue_number: number,
         labels: ['NEW JOBS'],
       });
-
-      octokit.issues.addAssignees({
+      console.log(`Lucky asignee is ${asignees[index]}`);
+      await octokit.issues.addAssignees({
         owner,
         repo,
         issue_number: number,
         asignees: [asignees[index]],
       });
+      await octokit.pulls.createReviewRequest({
+        owner,
+        repo,
+        issue_number: number,
+        asignees: [asignees[index]],
+      })
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
 
