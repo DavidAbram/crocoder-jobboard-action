@@ -2,20 +2,13 @@ module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 283:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-module.exports =
-/******/ (() => { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
 /***/ 932:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __nested_webpack_require_165__) => {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-const core = __nested_webpack_require_165__(186);
-const { exec } = __nested_webpack_require_165__(514);
-const fetch = __nested_webpack_require_165__(467);
-const { Octokit } = __nested_webpack_require_165__(375);
+const core = __webpack_require__(186);
+const { exec } = __webpack_require__(514);
+const fetch = __webpack_require__(467);
+const { Octokit } = __webpack_require__(375);
 
 (async () => {
   try {
@@ -91,9 +84,13 @@ Task | Evaluation | Comment
 ------------ | ------------- | ------------- 
 Relevant job post | ✔️ / ❌ |
 Readable title | ✔️ / ❌ |
+Title has less than 30 letters | ✔️ / ❌ |
 Relevant hashtags | ✔️ / ❌ |
+Relevant summary | ✔️ / ❌ |
+Correct job type | ✔️ / ❌ |
 Content formatted correctly | ✔️ / ❌ |
 Links are not broken | ✔️ / ❌ |
+Changed featured if needed | ✔️ / ❌ |
         `,
         draft: true,
         maintainer_can_modify: true,
@@ -175,7 +172,7 @@ ${prMessage}
 /***/ }),
 
 /***/ 351:
-/***/ (function(__unused_webpack_module, exports, __nested_webpack_require_5865__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -187,8 +184,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__nested_webpack_require_5865__(87));
-const utils_1 = __nested_webpack_require_5865__(278);
+const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(278);
 /**
  * Commands
  *
@@ -261,7 +258,7 @@ function escapeProperty(s) {
 /***/ }),
 
 /***/ 186:
-/***/ (function(__unused_webpack_module, exports, __nested_webpack_require_8397__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -282,11 +279,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const command_1 = __nested_webpack_require_8397__(351);
-const file_command_1 = __nested_webpack_require_8397__(717);
-const utils_1 = __nested_webpack_require_8397__(278);
-const os = __importStar(__nested_webpack_require_8397__(87));
-const path = __importStar(__nested_webpack_require_8397__(622));
+const command_1 = __webpack_require__(351);
+const file_command_1 = __webpack_require__(717);
+const utils_1 = __webpack_require__(278);
+const os = __importStar(__webpack_require__(87));
+const path = __importStar(__webpack_require__(622));
 /**
  * The code to exit an action
  */
@@ -506,7 +503,7 @@ exports.getState = getState;
 /***/ }),
 
 /***/ 717:
-/***/ (function(__unused_webpack_module, exports, __nested_webpack_require_16404__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -521,9 +518,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__nested_webpack_require_16404__(747));
-const os = __importStar(__nested_webpack_require_16404__(87));
-const utils_1 = __nested_webpack_require_16404__(278);
+const fs = __importStar(__webpack_require__(747));
+const os = __importStar(__webpack_require__(87));
+const utils_1 = __webpack_require__(278);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -568,7 +565,7 @@ exports.toCommandValue = toCommandValue;
 /***/ }),
 
 /***/ 514:
-/***/ (function(__unused_webpack_module, exports, __nested_webpack_require_18347__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -589,7 +586,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const tr = __importStar(__nested_webpack_require_18347__(159));
+const tr = __importStar(__webpack_require__(159));
 /**
  * Exec a command.
  * Output will be streamed to the live console.
@@ -619,7 +616,7 @@ exports.exec = exec;
 /***/ }),
 
 /***/ 159:
-/***/ (function(__unused_webpack_module, exports, __nested_webpack_require_20580__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -640,12 +637,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__nested_webpack_require_20580__(87));
-const events = __importStar(__nested_webpack_require_20580__(614));
-const child = __importStar(__nested_webpack_require_20580__(129));
-const path = __importStar(__nested_webpack_require_20580__(622));
-const io = __importStar(__nested_webpack_require_20580__(436));
-const ioUtil = __importStar(__nested_webpack_require_20580__(962));
+const os = __importStar(__webpack_require__(87));
+const events = __importStar(__webpack_require__(614));
+const child = __importStar(__webpack_require__(129));
+const path = __importStar(__webpack_require__(622));
+const io = __importStar(__webpack_require__(436));
+const ioUtil = __importStar(__webpack_require__(962));
 /* eslint-disable @typescript-eslint/unbound-method */
 const IS_WINDOWS = process.platform === 'win32';
 /*
@@ -1226,7 +1223,7 @@ class ExecState extends events.EventEmitter {
 /***/ }),
 
 /***/ 962:
-/***/ (function(__unused_webpack_module, exports, __nested_webpack_require_45033__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -1241,9 +1238,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const assert_1 = __nested_webpack_require_45033__(357);
-const fs = __nested_webpack_require_45033__(747);
-const path = __nested_webpack_require_45033__(622);
+const assert_1 = __webpack_require__(357);
+const fs = __webpack_require__(747);
+const path = __webpack_require__(622);
 _a = fs.promises, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
 exports.IS_WINDOWS = process.platform === 'win32';
 function exists(fsPath) {
@@ -1428,7 +1425,7 @@ function isUnixExecutable(stats) {
 /***/ }),
 
 /***/ 436:
-/***/ (function(__unused_webpack_module, exports, __nested_webpack_require_52721__) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
@@ -1442,10 +1439,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const childProcess = __nested_webpack_require_52721__(129);
-const path = __nested_webpack_require_52721__(622);
-const util_1 = __nested_webpack_require_52721__(669);
-const ioUtil = __nested_webpack_require_52721__(962);
+const childProcess = __webpack_require__(129);
+const path = __webpack_require__(622);
+const util_1 = __webpack_require__(669);
+const ioUtil = __webpack_require__(962);
 const exec = util_1.promisify(childProcess.exec);
 /**
  * Copies a file or folder.
@@ -1782,18 +1779,18 @@ exports.createTokenAuth = createTokenAuth;
 /***/ }),
 
 /***/ 762:
-/***/ ((__unused_webpack_module, exports, __nested_webpack_require_65713__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-var universalUserAgent = __nested_webpack_require_65713__(30);
-var beforeAfterHook = __nested_webpack_require_65713__(682);
-var request = __nested_webpack_require_65713__(234);
-var graphql = __nested_webpack_require_65713__(668);
-var authToken = __nested_webpack_require_65713__(334);
+var universalUserAgent = __webpack_require__(30);
+var beforeAfterHook = __webpack_require__(682);
+var request = __webpack_require__(234);
+var graphql = __webpack_require__(668);
+var authToken = __webpack_require__(334);
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -1966,15 +1963,15 @@ exports.Octokit = Octokit;
 /***/ }),
 
 /***/ 440:
-/***/ ((__unused_webpack_module, exports, __nested_webpack_require_71058__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-var isPlainObject = __nested_webpack_require_71058__(287);
-var universalUserAgent = __nested_webpack_require_71058__(30);
+var isPlainObject = __webpack_require__(287);
+var universalUserAgent = __webpack_require__(30);
 
 function lowercaseKeys(object) {
   if (!object) {
@@ -2351,15 +2348,15 @@ exports.endpoint = endpoint;
 /***/ }),
 
 /***/ 668:
-/***/ ((__unused_webpack_module, exports, __nested_webpack_require_83296__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-var request = __nested_webpack_require_83296__(234);
-var universalUserAgent = __nested_webpack_require_83296__(30);
+var request = __webpack_require__(234);
+var universalUserAgent = __webpack_require__(30);
 
 const VERSION = "4.5.6";
 
@@ -3805,7 +3802,7 @@ exports.restEndpointMethods = restEndpointMethods;
 /***/ }),
 
 /***/ 537:
-/***/ ((__unused_webpack_module, exports, __nested_webpack_require_144433__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
@@ -3814,8 +3811,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var deprecation = __nested_webpack_require_144433__(481);
-var once = _interopDefault(__nested_webpack_require_144433__(223));
+var deprecation = __webpack_require__(481);
+var once = _interopDefault(__webpack_require__(223));
 
 const logOnce = once(deprecation => console.warn(deprecation));
 /**
@@ -3868,7 +3865,7 @@ exports.RequestError = RequestError;
 /***/ }),
 
 /***/ 234:
-/***/ ((__unused_webpack_module, exports, __nested_webpack_require_146561__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
@@ -3877,11 +3874,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var endpoint = __nested_webpack_require_146561__(440);
-var universalUserAgent = __nested_webpack_require_146561__(30);
-var isPlainObject = __nested_webpack_require_146561__(287);
-var nodeFetch = _interopDefault(__nested_webpack_require_146561__(467));
-var requestError = __nested_webpack_require_146561__(537);
+var endpoint = __webpack_require__(440);
+var universalUserAgent = __webpack_require__(30);
+var isPlainObject = __webpack_require__(287);
+var nodeFetch = _interopDefault(__webpack_require__(467));
+var requestError = __webpack_require__(537);
 
 const VERSION = "5.4.9";
 
@@ -4024,17 +4021,17 @@ exports.request = request;
 /***/ }),
 
 /***/ 375:
-/***/ ((__unused_webpack_module, exports, __nested_webpack_require_150649__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 
-var core = __nested_webpack_require_150649__(762);
-var pluginRequestLog = __nested_webpack_require_150649__(883);
-var pluginPaginateRest = __nested_webpack_require_150649__(193);
-var pluginRestEndpointMethods = __nested_webpack_require_150649__(44);
+var core = __webpack_require__(762);
+var pluginRequestLog = __webpack_require__(883);
+var pluginPaginateRest = __webpack_require__(193);
+var pluginRestEndpointMethods = __webpack_require__(44);
 
 const VERSION = "18.0.6";
 
@@ -4049,11 +4046,11 @@ exports.Octokit = Octokit;
 /***/ }),
 
 /***/ 682:
-/***/ ((module, __unused_webpack_exports, __nested_webpack_require_151310__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var register = __nested_webpack_require_151310__(670)
-var addHook = __nested_webpack_require_151310__(549)
-var removeHook = __nested_webpack_require_151310__(819)
+var register = __webpack_require__(670)
+var addHook = __webpack_require__(549)
+var removeHook = __webpack_require__(819)
 
 // bind with array of arguments: https://stackoverflow.com/a/21792913
 var bind = Function.bind
@@ -4299,7 +4296,7 @@ exports.isPlainObject = isPlainObject;
 /***/ }),
 
 /***/ 467:
-/***/ ((module, exports, __nested_webpack_require_156647__) => {
+/***/ ((module, exports, __webpack_require__) => {
 
 "use strict";
 
@@ -4308,11 +4305,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var Stream = _interopDefault(__nested_webpack_require_156647__(413));
-var http = _interopDefault(__nested_webpack_require_156647__(605));
-var Url = _interopDefault(__nested_webpack_require_156647__(835));
-var https = _interopDefault(__nested_webpack_require_156647__(211));
-var zlib = _interopDefault(__nested_webpack_require_156647__(761));
+var Stream = _interopDefault(__webpack_require__(413));
+var http = _interopDefault(__webpack_require__(605));
+var Url = _interopDefault(__webpack_require__(835));
+var https = _interopDefault(__webpack_require__(211));
+var zlib = _interopDefault(__webpack_require__(761));
 
 // Based on https://github.com/tmpvar/jsdom/blob/aa85b2abf07766ff7bf5c1f6daafb3726f2f2db5/lib/jsdom/living/blob.js
 
@@ -4463,7 +4460,7 @@ FetchError.prototype.name = 'FetchError';
 
 let convert;
 try {
-	convert = __nested_webpack_require_156647__(877).convert;
+	convert = __webpack_require__(877).convert;
 } catch (e) {}
 
 const INTERNALS = Symbol('Body internals');
@@ -5956,9 +5953,9 @@ exports.FetchError = FetchError;
 /***/ }),
 
 /***/ 223:
-/***/ ((module, __unused_webpack_exports, __nested_webpack_require_198352__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var wrappy = __nested_webpack_require_198352__(940)
+var wrappy = __webpack_require__(940)
 module.exports = wrappy(once)
 module.exports.strict = wrappy(onceStrict)
 
@@ -6082,146 +6079,6 @@ module.exports = eval("require")("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = __webpack_require__(357);
-
-/***/ }),
-
-/***/ 129:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(129);
-
-/***/ }),
-
-/***/ 614:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(614);
-
-/***/ }),
-
-/***/ 747:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(747);
-
-/***/ }),
-
-/***/ 605:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(605);
-
-/***/ }),
-
-/***/ 211:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(211);
-
-/***/ }),
-
-/***/ 87:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(87);
-
-/***/ }),
-
-/***/ 622:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(622);
-
-/***/ }),
-
-/***/ 413:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(413);
-
-/***/ }),
-
-/***/ 835:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(835);
-
-/***/ }),
-
-/***/ 669:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(669);
-
-/***/ }),
-
-/***/ 761:
-/***/ ((module) => {
-
-"use strict";
-module.exports = __webpack_require__(761);
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nested_webpack_require_202273__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		var threw = true;
-/******/ 		try {
-/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nested_webpack_require_202273__);
-/******/ 			threw = false;
-/******/ 		} finally {
-/******/ 			if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 		}
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat */
-/******/ 	
-/******/ 	__nested_webpack_require_202273__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __nested_webpack_require_202273__(932);
-/******/ })()
-;
-
-/***/ }),
-
-/***/ 357:
-/***/ ((module) => {
-
-"use strict";
 module.exports = require("assert");
 
 /***/ }),
@@ -6335,7 +6192,7 @@ module.exports = require("zlib");
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
-/******/ 			__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 			threw = false;
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
@@ -6352,6 +6209,6 @@ module.exports = require("zlib");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(283);
+/******/ 	return __webpack_require__(932);
 /******/ })()
 ;
