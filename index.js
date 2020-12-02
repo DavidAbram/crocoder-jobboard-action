@@ -129,12 +129,15 @@ Changed featured if needed | ✔️ / ❌ |
         labels: ['NEW JOBS'],
       });
       console.log(`Lucky asignee is ${asignees[index]}`);
-      await octokit.issues.addAssignees({
+      
+      const result = await octokit.issues.addAssignees({
         owner,
         repo,
         issue_number: number,
         asignees: [asignees[index]],
       });
+
+      console.log(result);
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
 
