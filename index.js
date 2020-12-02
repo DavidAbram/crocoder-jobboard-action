@@ -83,6 +83,7 @@ Relevant summary | ✔️ / ❌ |
 Correct job type | ✔️ / ❌ |
 Content formatted correctly | ✔️ / ❌ |
 Links are not broken | ✔️ / ❌ |
+Changed featured if needed | ✔️ / ❌ |
         `,
         draft: true,
         maintainer_can_modify: true,
