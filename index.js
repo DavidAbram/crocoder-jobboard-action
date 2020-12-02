@@ -135,12 +135,6 @@ Changed featured if needed | ✔️ / ❌ |
         issue_number: number,
         asignees: [asignees[index]],
       });
-      await octokit.pulls.createReviewRequest({
-        owner,
-        repo,
-        issue_number: number,
-        asignees: [asignees[index]],
-      })
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
 
