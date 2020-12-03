@@ -73,7 +73,9 @@ const split = (number, parts) => {
     const createdPRs = [];
 
     const asignees = createAsigneeList(asigneeUsernames.split(','), published.length);
+
     console.log(asigneeUsernames, asigneeUsernames.split(','), asignees);
+
     for (let index = 0; index < published.length; index++) {
       const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
 
@@ -102,7 +104,7 @@ const split = (number, parts) => {
         
 Dear CroCoder devs please use the table to evaluate the job ad.  
 If you made any changes to the content of md file, please add a comment to the relevent row.  
-Check the content of the job ad [here](https://github.com/${owner}/${repo}/blob/${branchPrefix}/${titleCompany}/${pathToContentFolder}/${jobPostFilename}).
+Check the content of the job ad [here](https://github.com/${owner}/${repo}/blob/${branch}/${pathToContentFolder}/${jobPostFilename}).
         
 Task | Evaluation | Comment
 ------------ | ------------- | ------------- 
