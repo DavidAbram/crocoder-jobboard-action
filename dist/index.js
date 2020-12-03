@@ -137,11 +137,11 @@ Changed featured if needed | ✔️ / ❌ |
       });
       console.log(`Lucky asignee is ${asignees[index]}`);
       
-      const result = await octokit.issues.addAssignees({
+      const result = await octokit.pulls.requestReviewers({
         owner,
         repo,
         issue_number: number,
-        asignees: [asignees[index]],
+        reviewers: [asignees[index]]
       });
 
       console.log(result);
