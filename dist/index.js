@@ -142,7 +142,7 @@ Changed featured if needed | ✔️ / ❌ |
       const result = await octokit.pulls.requestReviewers({
         owner,
         repo,
-        issue_number: number,
+        pull_number: number,
         reviewers: [asignees[index]]
       });
 
