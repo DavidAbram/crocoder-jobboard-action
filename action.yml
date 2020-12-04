@@ -8,7 +8,7 @@ inputs:
   content-folder-path:
     description: 'Path to content folder'
     required: false
-    default: 'packages/jobboard/website/content'
+    default: 'packages/jobboard/website/content/jobs'
   changelog-folder-path:
     description: 'Path to changelog folder'
     required: false

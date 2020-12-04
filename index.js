@@ -198,6 +198,13 @@ ${prMessage}
       labels: ['RELEASE'],
     });
 
+    await octokit.pulls.requestReviewers({
+      owner,
+      repo,
+      pull_number: number,
+      reviewers: [asignees[index]]
+    });
+
 
   } catch (error) {
     console.log(error.message);
