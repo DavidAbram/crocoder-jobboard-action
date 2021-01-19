@@ -36,7 +36,11 @@ const split = (number, parts) => {
   }
 }
 
-
+const wait = (ms) => {
+  return new Promise((resolve) => {
+      setTimeout(resolve, ms)
+  })
+}
 
 (async () => {
   try {
@@ -59,10 +63,14 @@ const split = (number, parts) => {
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
     await exec('git', [ '-C', workingDirectory, 'status']);
+    await wait(200);
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.name', authorName ]);
+    await wait(200);
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ]);
+    await wait(200);
     
     await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
+    await wait(200);
 
     const result = await fetch(jobBoardApiUrl, {
       "method": "GET",
@@ -70,6 +78,7 @@ const split = (number, parts) => {
         "authorization": jobBoardApiToken,
       }
     });
+    await wait(200);
 
     const { published, archived } = await result.json();
 
@@ -90,13 +99,19 @@ const split = (number, parts) => {
       const fullCommitMessage = `${commitMessage} ${title}`;
 
       await exec('git', [ '-C', workingDirectory, 'branch', branch]);
+      await wait(200);
       await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
+      await wait(200);
 
       await exec('bash', [ '-c', `curl ${jobPostMarkdown} -o ${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
-      
+  
+      await wait(200);
       await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
+      await wait(200);
       await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
+      await wait(200);
       await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', branch ]);
+      await wait(200);
 
 
       const response = await octokit.pulls.create({
@@ -128,6 +143,7 @@ Changed featured if needed | ✔️ / ❌ |
         draft: true,
         maintainer_can_modify: true,
       });
+      await wait(200);
 
       const { number } = response.data;
 
@@ -137,7 +153,7 @@ Changed featured if needed | ✔️ / ❌ |
         issue_number: number,
         labels: ['NEW JOBS'],
       });
-      console.log(`Lucky asignee is ${asignees[index]}`);
+      await wait(200);
       
       const result = await octokit.pulls.requestReviewers({
         owner,
@@ -145,10 +161,10 @@ Changed featured if needed | ✔️ / ❌ |
         pull_number: number,
         reviewers: [asignees[index]]
       });
-
-      console.log(result);
+      await wait(200);
 
       await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
+      console.log(`Lucky asignee is ${asignees[index]}`);
 
       createdPRs.push({
         branch,
@@ -161,56 +177,20 @@ Changed featured if needed | ✔️ / ❌ |
 ${createdPRs.map(p => `- [${p.branch}](https://github.com/${owner}/${repo}/pull/${p.number})`).join('\n')}
     `;
 
-    const prMessage = createdPRs.map(p => `[${p.branch}](https://github.com/${owner}/${repo}/pull/${p.number}) | ✔️ / ❌`).join('\n');
-
     const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
     
     await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
+    await wait(200);
 
     await exec('git', [ '-C', workingDirectory, 'branch', releaseBranch]);
+    await wait(200);
     await exec('git', [ '-C', workingDirectory, 'checkout', releaseBranch]);
+    await wait(200);
     await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', releaseBranch ]);
+    await wait(200);
     
     await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
-
-    /*await exec('bash', [ '-c', `echo "${changelog}" > ${workingDirectory}/${pathToChangelogFolder}/release-${new Date().getTime()}.md`]);
-    await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
-    await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', `preparing for ${releaseBranch}` ]);
-    await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', startingBranch ]);
-
-
-    const response = await octokit.pulls.create({
-      owner,
-      repo,
-      title: `Release ${new Date().toDateString()}`,
-      head: startingBranch,
-      base: releaseBranch,
-      body: `
-# Release ${new Date().toDateString()}
-Don't merge until next PRs are merged or closed:  
-Branch | Merged/Closed
------------- | ------------
-${prMessage}
-      `,
-      draft: true,
-      maintainer_can_modify: true,
-    });
-
-    const { number } = response.data;
-
-    await octokit.issues.setLabels({
-      owner,
-      repo,
-      issue_number: number,
-      labels: ['RELEASE'],
-    });
-
-    await octokit.pulls.requestReviewers({
-      owner,
-      repo,
-      pull_number: number,
-      reviewers: [asignees[index]]
-    });*/
+    await wait(200);
 
 
   } catch (error) {
