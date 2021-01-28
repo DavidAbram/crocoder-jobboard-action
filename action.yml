@@ -1,6 +1,10 @@
 name: 'CroCoder JobBoard Action'
 description: 'Action that gets new Job Posts.'
 inputs:
+  command:
+    description: ''
+    required: false
+    default: 'GET'
   working-directory:
     description: 'Root directory'
     required: false

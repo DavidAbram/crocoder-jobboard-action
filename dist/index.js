@@ -2,45 +2,194 @@ module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 319:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const fetch = __webpack_require__(467);
+const fs = __webpack_require__(747);
+
+module.exports = async (jobBoardApiUrl, workingDirectory, pathToContentFolder) => {
+
+
+  let url = `${jobBoardApiUrl}/archive`;
+    let options = {
+      method: "GET",
+      headers: { Authorization: jobBoardApiToken },
+    };
+    const response = await fetch(url, options);
+    const data = await response.json();
+    const markdownsToArchive = data.map((t) => {
+      const strings = t.jobPostMarkdown.split("/");
+      return {
+        fileName: `${workingDirectory}/${pathToContentFolder}/${strings[strings.length - 1]}`,
+        url: t.url,
+      };
+    });
+
+    const archivedMarkdownUrls = [];
+    markdownsToArchive.forEach(({ fileName, url }) => {
+      try {
+        const content = fs.readFileSync(fileName, "utf8");
+        const match = content.match(/archived: "true"/g);
+        if (!match) {
+          const [, firstPart, secondPart] = content.match(/(---.*)(---.*)/s);
+          fs.writeFileSync(
+            fileName,
+            `${firstPart}archived: "true"\n${secondPart}`,
+            { encoding: "utf8", flag: "w" }
+          );
+          archivedMarkdownUrls.push(url);
+        }
+      } catch (err) {}
+    });
+
+    console.log(archivedMarkdownUrls);
+}
+
+/***/ }),
+
+/***/ 200:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const { exec } = __webpack_require__(514);
+const { customAlphabet } = __webpack_require__(140);
+const fetch = __webpack_require__(467);
+const { Octokit } = __webpack_require__(375);
+const nanoid = customAlphabet(
+  "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
+  5
+);
+const { wait, createAsigneeList } = __webpack_require__(252);
+
+
+module.exports = async (owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames) => {
+  const result = await fetch(jobBoardApiUrl, {
+    "method": "GET",
+    "headers": {
+      "authorization": jobBoardApiToken,
+    }
+  });
+  await wait(200);
+
+  const { published, archived } = await result.json();
+
+  const octokit = new Octokit({
+    auth: githubToken,
+  });
+
+  const createdPRs = [];
+
+  const asignees = createAsigneeList(asigneeUsernames.split(','), published.length);
+
+  for (let index = 0; index < published.length; index++) {
+    const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
+
+    const branch = `${branchPrefix}/${titleCompany}-${nanoid()}`;
+    const fullCommitMessage = `${commitMessage} ${title}`;
+
+    await exec('git', ['-C', workingDirectory, 'branch', branch]);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'checkout', branch]);
+    await wait(200);
+
+    await exec('bash', ['-c', `curl ${jobPostMarkdown} -o ${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
+
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'add', '-A']);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage]);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'push', '--set-upstream', 'origin', branch]);
+    await wait(200);
+
+
+    const response = await octokit.pulls.create({
+      owner,
+      repo,
+      title,
+      head: branch,
+      base: startingBranch,
+      body: `
+# ${title}
+### ${hashtags.join(' ')}
+      
+Dear CroCoder devs please use the table to evaluate the job ad.  
+If you made any changes to the content of md file, please add a comment to the relevent row.  
+Check the content of the job ad [here](https://github.com/${owner}/${repo}/blob/${branch}/${pathToContentFolder}/${jobPostFilename}).
+      
+Task | Evaluation | Comment
+------------ | ------------- | ------------- 
+Relevant job post | ✔️ / ❌ |
+Readable title | ✔️ / ❌ |
+Title has less than 30 letters | ✔️ / ❌ |
+Relevant hashtags | ✔️ / ❌ |
+Relevant summary | ✔️ / ❌ |
+Correct job type | ✔️ / ❌ |
+Content formatted correctly | ✔️ / ❌ |
+Links are not broken | ✔️ / ❌ |
+Changed featured if needed | ✔️ / ❌ |
+      `,
+      draft: true,
+      maintainer_can_modify: true,
+    });
+    await wait(200);
+
+    const { number } = response.data;
+
+    await octokit.issues.setLabels({
+      owner,
+      repo,
+      issue_number: number,
+      labels: ['NEW JOBS'],
+    });
+    await wait(200);
+
+    await octokit.pulls.requestReviewers({
+      owner,
+      repo,
+      pull_number: number,
+      reviewers: [asignees[index]]
+    });
+    await wait(200);
+
+    await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
+    console.log(`Lucky asignee is ${asignees[index]}`);
+
+    createdPRs.push({
+      branch,
+      number,
+    });
+  }
+
+  const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
+
+  await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
+  await wait(200);
+
+  await exec('git', ['-C', workingDirectory, 'branch', releaseBranch]);
+  await wait(200);
+  await exec('git', ['-C', workingDirectory, 'checkout', releaseBranch]);
+  await wait(200);
+  await exec('git', ['-C', workingDirectory, 'push', '--set-upstream', 'origin', releaseBranch]);
+  await wait(200);
+
+  await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
+  await wait(200);
+}
+
+
+/***/ }),
+
 /***/ 932:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 const core = __webpack_require__(186);
 const { exec } = __webpack_require__(514);
-const fetch = __webpack_require__(467);
-const { Octokit } = __webpack_require__(375);
-const { customAlphabet } = __webpack_require__(140);
-const nanoid = customAlphabet(
-  "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
-  5
-);
 
-const shuffleArray = (array) => {
-  const arrayCopy = array.slice(0);
-  return arrayCopy.sort(() => Math.random() - 0.5);
-}
+const get = __webpack_require__(200);
+const archiveAll = __webpack_require__(319);
+const { wait } = __webpack_require__(252);
 
-const createAsigneeList = (usernames, prCount) => {
-  const jobsPerUsername = split(prCount, usernames.length);
-  console.log(jobsPerUsername);
-  return shuffleArray(shuffleArray(usernames).flatMap((username, i) => Array(jobsPerUsername[i]).fill(username)));
-}
-
-const split = (number, parts) => {
-  if(number % parts === 0) {
-    return Array(parts).fill(number / parts);
-  } else {
-    const a =  number % parts;
-    const b = (number - (number % parts)) / parts;
-    return [...Array(a).fill(b+1), ...Array(parts-a).fill(b)];
-  }
-}
-
-const wait = (ms) => {
-  return new Promise((resolve) => {
-      setTimeout(resolve, ms)
-  })
-}
 
 (async () => {
   try {
@@ -53,17 +202,14 @@ const wait = (ms) => {
     const commitMessage = core.getInput('commit-message');
     const githubToken = core.getInput('github-token');
     const pathToContentFolder = core.getInput('content-folder-path');
-    const pathToChangelogFolder = core.getInput('changelog-folder-path');
     const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken = core.getInput('jobboard-token');
     const asigneeUsernames = core.getInput('asignees');
-    
+    const command = core.getInput('command');
     
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
-    await exec('git', [ '-C', workingDirectory, 'status']);
-    await wait(200);
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.name', authorName ]);
     await wait(200);
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ]);
@@ -72,127 +218,15 @@ const wait = (ms) => {
     await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
     await wait(200);
 
-    const result = await fetch(jobBoardApiUrl, {
-      "method": "GET",
-      "headers": {
-        "authorization": jobBoardApiToken,
-      }
-    });
-    await wait(200);
-
-    const { published, archived } = await result.json();
-
-    const octokit = new Octokit({
-      auth: githubToken,
-    });
-
-    const createdPRs = [];
-
-    const asignees = createAsigneeList(asigneeUsernames.split(','), published.length);
-
-    console.log(asigneeUsernames, asigneeUsernames.split(','), asignees);
-
-    for (let index = 0; index < published.length; index++) {
-      const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
-
-      const branch = `${branchPrefix}/${titleCompany}-${nanoid()}`;
-      const fullCommitMessage = `${commitMessage} ${title}`;
-
-      await exec('git', [ '-C', workingDirectory, 'branch', branch]);
-      await wait(200);
-      await exec('git', [ '-C', workingDirectory, 'checkout', branch]);
-      await wait(200);
-
-      await exec('bash', [ '-c', `curl ${jobPostMarkdown} -o ${workingDirectory}/${pathToContentFolder}/${jobPostFilename}`]);
-  
-      await wait(200);
-      await exec('git', [ '-C', workingDirectory, 'add', '-A' ]);
-      await wait(200);
-      await exec('git', [ '-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage ]);
-      await wait(200);
-      await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', branch ]);
-      await wait(200);
-
-
-      const response = await octokit.pulls.create({
-        owner,
-        repo,
-        title,
-        head: branch,
-        base: startingBranch,
-        body: `
-# ${title}
-### ${hashtags.join(' ')}
-        
-Dear CroCoder devs please use the table to evaluate the job ad.  
-If you made any changes to the content of md file, please add a comment to the relevent row.  
-Check the content of the job ad [here](https://github.com/${owner}/${repo}/blob/${branch}/${pathToContentFolder}/${jobPostFilename}).
-        
-Task | Evaluation | Comment
------------- | ------------- | ------------- 
-Relevant job post | ✔️ / ❌ |
-Readable title | ✔️ / ❌ |
-Title has less than 30 letters | ✔️ / ❌ |
-Relevant hashtags | ✔️ / ❌ |
-Relevant summary | ✔️ / ❌ |
-Correct job type | ✔️ / ❌ |
-Content formatted correctly | ✔️ / ❌ |
-Links are not broken | ✔️ / ❌ |
-Changed featured if needed | ✔️ / ❌ |
-        `,
-        draft: true,
-        maintainer_can_modify: true,
-      });
-      await wait(200);
-
-      const { number } = response.data;
-
-      await octokit.issues.setLabels({
-        owner,
-        repo,
-        issue_number: number,
-        labels: ['NEW JOBS'],
-      });
-      await wait(200);
-      
-      const result = await octokit.pulls.requestReviewers({
-        owner,
-        repo,
-        pull_number: number,
-        reviewers: [asignees[index]]
-      });
-      await wait(200);
-
-      await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]); 
-      console.log(`Lucky asignee is ${asignees[index]}`);
-
-      createdPRs.push({
-        branch,
-        number,
-      });
+    switch (command) {
+      case 'ARCHIVE_ALL':
+        await archiveAll(jobBoardApiUrl, workingDirectory, pathToContentFolder);
+        break;
+      case 'GET':
+      default:
+        await get(owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames);
+        break;
     }
-
-    const changelog = `
-# Release ${new Date().toDateString()};
-${createdPRs.map(p => `- [${p.branch}](https://github.com/${owner}/${repo}/pull/${p.number})`).join('\n')}
-    `;
-
-    const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
-    
-    await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
-    await wait(200);
-
-    await exec('git', [ '-C', workingDirectory, 'branch', releaseBranch]);
-    await wait(200);
-    await exec('git', [ '-C', workingDirectory, 'checkout', releaseBranch]);
-    await wait(200);
-    await exec('git', [ '-C', workingDirectory, 'push', '--set-upstream', 'origin', releaseBranch ]);
-    await wait(200);
-    
-    await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
-    await wait(200);
-
-
   } catch (error) {
     console.log(error.message);
     core.setFailed(error.message)
@@ -6094,6 +6128,44 @@ function wrappy (fn, cb) {
   }
 }
 
+
+/***/ }),
+
+/***/ 252:
+/***/ ((module) => {
+
+const shuffleArray = (array) => {
+  const arrayCopy = array.slice(0);
+  return arrayCopy.sort(() => Math.random() - 0.5);
+}
+
+const createAsigneeList = (usernames, prCount) => {
+  const jobsPerUsername = split(prCount, usernames.length);
+  console.log(jobsPerUsername);
+  return shuffleArray(shuffleArray(usernames).flatMap((username, i) => Array(jobsPerUsername[i]).fill(username)));
+}
+
+const split = (number, parts) => {
+  if(number % parts === 0) {
+    return Array(parts).fill(number / parts);
+  } else {
+    const a =  number % parts;
+    const b = (number - (number % parts)) / parts;
+    return [...Array(a).fill(b+1), ...Array(parts-a).fill(b)];
+  }
+}
+
+const wait = (ms) => {
+  return new Promise((resolve) => {
+      setTimeout(resolve, ms)
+  })
+}
+
+module.exports = {
+  shuffleArray,
+  createAsigneeList,
+  wait,
+}
 
 /***/ }),
 
