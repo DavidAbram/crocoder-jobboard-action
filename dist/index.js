@@ -7,6 +7,7 @@ module.exports =
 
 const fetch = __webpack_require__(467);
 const fs = __webpack_require__(747);
+const { customAlphabet } = __webpack_require__(140);
 const nanoid = customAlphabet(
   "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
   5
