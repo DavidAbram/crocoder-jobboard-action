@@ -12,6 +12,7 @@ const nanoid = customAlphabet(
   "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
   5
 );
+const { wait, createAsigneeList } = __webpack_require__(252);
 
 module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch) => {
 
