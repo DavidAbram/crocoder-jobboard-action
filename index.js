@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const { exec } = require('@actions/exec');
 const get = require('./get');
-const archiveAll = require('./archiveAll');
+const { archiveAll } = require('./archiveAll');
 const { wait } = require('./utils');
 
 
@@ -36,7 +36,7 @@ const { wait } = require('./utils');
         break;
       case 'GET':
       default:
-        await get(owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch);
+        await get(owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage);
         break;
     }
   } catch (error) {

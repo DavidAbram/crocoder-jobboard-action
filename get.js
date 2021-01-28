@@ -7,9 +7,10 @@ const nanoid = customAlphabet(
   5
 );
 const { wait, createAsigneeList } = require('./utils');
+const { archiveJobs } = require('./archiveAll');
 
 
-module.exports = async (owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch) => {
+module.exports = async (owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
   const result = await fetch(jobBoardApiUrl, {
     "method": "GET",
     "headers": {
@@ -122,4 +123,6 @@ Changed featured if needed | ✔️ / ❌ |
 
   await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
   await wait(200);
+
+  await archiveJobs(archived, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch)
 }
