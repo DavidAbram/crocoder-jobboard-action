@@ -8,7 +8,7 @@ module.exports =
 const fetch = __webpack_require__(467);
 const fs = __webpack_require__(747);
 
-module.exports = async (jobBoardApiUrl, workingDirectory, pathToContentFolder) => {
+module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder) => {
 
 
   let url = `${jobBoardApiUrl}/archive`;
@@ -220,7 +220,7 @@ const { wait } = __webpack_require__(252);
 
     switch (command) {
       case 'ARCHIVE_ALL':
-        await archiveAll(jobBoardApiUrl, workingDirectory, pathToContentFolder);
+        await archiveAll(jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder);
         break;
       case 'GET':
       default:

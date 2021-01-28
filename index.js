@@ -35,7 +35,7 @@ const { wait } = require('./utils');
 
     switch (command) {
       case 'ARCHIVE_ALL':
-        await archiveAll(jobBoardApiUrl, workingDirectory, pathToContentFolder);
+        await archiveAll(jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder);
         break;
       case 'GET':
       default:

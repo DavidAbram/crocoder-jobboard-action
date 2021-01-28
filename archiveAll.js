@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
 
-module.exports = async (jobBoardApiUrl, workingDirectory, pathToContentFolder) => {
+module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder) => {
 
 
   let url = `${jobBoardApiUrl}/archive`;
