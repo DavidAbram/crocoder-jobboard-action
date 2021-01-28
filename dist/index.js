@@ -7,9 +7,12 @@ module.exports =
 
 const fetch = __webpack_require__(467);
 const fs = __webpack_require__(747);
+const nanoid = customAlphabet(
+  "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
+  5
+);
 
-module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder) => {
-
+module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch) => {
 
   let url = `${jobBoardApiUrl}/archive`;
     let options = {
@@ -25,6 +28,16 @@ module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, path
         url: t.url,
       };
     });
+
+    const asignees = createAsigneeList(asigneeUsernames.split(','), 1);
+
+    const branch = `${archiveBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
+    const fullCommitMessage = `${archiveCommitMessage}`;
+
+    await exec('git', ['-C', workingDirectory, 'branch', branch]);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'checkout', branch]);
+    await wait(200);
 
     const archivedMarkdownUrls = [];
     markdownsToArchive.forEach(({ fileName, url }) => {
@@ -43,7 +56,41 @@ module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, path
       } catch (err) {}
     });
 
-    console.log(archivedMarkdownUrls);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'add', '-A']);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage]);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'push', '--set-upstream', 'origin', branch]);
+    await wait(200);
+
+
+    const prResponse = await octokit.pulls.create({
+      owner,
+      repo,
+      title,
+      head: branch,
+      base: startingBranch,
+      body: `
+# ${title}
+### ${hashtags.join(' ')}
+      
+Dear CroCoder devs please merge this to archive jobs.
+      `,
+      draft: true,
+      maintainer_can_modify: true,
+    });
+    await wait(200);
+
+    const { number } = prResponse.data;
+
+    await octokit.pulls.requestReviewers({
+      owner,
+      repo,
+      pull_number: number,
+      reviewers: [asignees[index]]
+    });
+    await wait(200);
 }
 
 /***/ }),
@@ -62,7 +109,7 @@ const nanoid = customAlphabet(
 const { wait, createAsigneeList } = __webpack_require__(252);
 
 
-module.exports = async (owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames) => {
+module.exports = async (owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch) => {
   const result = await fetch(jobBoardApiUrl, {
     "method": "GET",
     "headers": {
@@ -185,7 +232,6 @@ Changed featured if needed | ✔️ / ❌ |
 
 const core = __webpack_require__(186);
 const { exec } = __webpack_require__(514);
-
 const get = __webpack_require__(200);
 const archiveAll = __webpack_require__(319);
 const { wait } = __webpack_require__(252);
@@ -193,20 +239,21 @@ const { wait } = __webpack_require__(252);
 
 (async () => {
   try {
-
     const workingDirectory = core.getInput('working-directory');
     const authorName = core.getInput('author-name');
     const authorEmail = core.getInput('author-email');
     const branchPrefix = core.getInput('branch-prefix');
     const releaseBranchPrefix = core.getInput('release-branch-prefix');
+    const archiveBranchPrefix = core.getInput('archive-branch-prefix')
     const commitMessage = core.getInput('commit-message');
+    const archiveCommitMessage = core.getInput('archive-commit-message');
     const githubToken = core.getInput('github-token');
     const pathToContentFolder = core.getInput('content-folder-path');
-    const startingBranch = core.getInput('starting-branch')
     const jobBoardApiUrl = core.getInput('jobboard-api');
     const jobBoardApiToken = core.getInput('jobboard-token');
     const asigneeUsernames = core.getInput('asignees');
     const command = core.getInput('command');
+    const startingBranch = core.getInput('starting-branch');
     
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 
@@ -217,11 +264,11 @@ const { wait } = __webpack_require__(252);
 
     switch (command) {
       case 'ARCHIVE_ALL':
-        await archiveAll(jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder);
+        await archiveAll(jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch);
         break;
       case 'GET':
       default:
-        await get(owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames);
+        await get(owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch);
         break;
     }
   } catch (error) {

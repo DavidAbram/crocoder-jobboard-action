@@ -1,8 +1,11 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
+const nanoid = customAlphabet(
+  "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
+  5
+);
 
-module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder) => {
-
+module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch) => {
 
   let url = `${jobBoardApiUrl}/archive`;
     let options = {
@@ -18,6 +21,16 @@ module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, path
         url: t.url,
       };
     });
+
+    const asignees = createAsigneeList(asigneeUsernames.split(','), 1);
+
+    const branch = `${archiveBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
+    const fullCommitMessage = `${archiveCommitMessage}`;
+
+    await exec('git', ['-C', workingDirectory, 'branch', branch]);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'checkout', branch]);
+    await wait(200);
 
     const archivedMarkdownUrls = [];
     markdownsToArchive.forEach(({ fileName, url }) => {
@@ -36,5 +49,39 @@ module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, path
       } catch (err) {}
     });
 
-    console.log(archivedMarkdownUrls);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'add', '-A']);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'commit', '--no-verify', '-m', fullCommitMessage]);
+    await wait(200);
+    await exec('git', ['-C', workingDirectory, 'push', '--set-upstream', 'origin', branch]);
+    await wait(200);
+
+
+    const prResponse = await octokit.pulls.create({
+      owner,
+      repo,
+      title,
+      head: branch,
+      base: startingBranch,
+      body: `
+# ${title}
+### ${hashtags.join(' ')}
+      
+Dear CroCoder devs please merge this to archive jobs.
+      `,
+      draft: true,
+      maintainer_can_modify: true,
+    });
+    await wait(200);
+
+    const { number } = prResponse.data;
+
+    await octokit.pulls.requestReviewers({
+      owner,
+      repo,
+      pull_number: number,
+      reviewers: [asignees[index]]
+    });
+    await wait(200);
 }

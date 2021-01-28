@@ -9,18 +9,14 @@ inputs:
     description: 'Root directory'
     required: false
     default: '.'
+  starting-branch:
+    description: ''
+    required: false
+    default: development
   content-folder-path:
     description: 'Path to content folder'
     required: false
     default: 'packages/jobboard/website/content/jobs'
-  changelog-folder-path:
-    description: 'Path to changelog folder'
-    required: false
-    default: 'packages/jobboard/changelog'
-  starting-branch:
-    description: 'Starting branch'
-    required: false
-    default: master
   author-name:
     description: 'Name of the user that creates PRs.'
     required: true
@@ -38,10 +34,18 @@ inputs:
     description: 'Release branch prefix (prefix/)'
     required: false
     default: release
+  archive-branch-prefix:
+    description: 'Archive branch prefix (prefix/)'
+    required: false
+    default: archive
   commit-message:
     description: 'Short commit message that will be prepended'
     required: false
     default: 'New job found:'
+  archive-commit-message:
+    description: 'Short commit message that will be prepended'
+    required: false
+    default: 'Some jobs to be archived'
   jobboard-api:
     description: 'URL of the JobBoard API'
     required: true

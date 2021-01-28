@@ -9,7 +9,7 @@ const nanoid = customAlphabet(
 const { wait, createAsigneeList } = require('./utils');
 
 
-module.exports = async (owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames) => {
+module.exports = async (owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch) => {
   const result = await fetch(jobBoardApiUrl, {
     "method": "GET",
     "headers": {
