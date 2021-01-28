@@ -8,6 +8,7 @@ module.exports =
 const fetch = __webpack_require__(467);
 const fs = __webpack_require__(747);
 const { exec } = __webpack_require__(514);
+const { Octokit } = __webpack_require__(375);
 const { customAlphabet } = __webpack_require__(140);
 const nanoid = customAlphabet(
   "ModuleSymbhasOwnPrABCDEFGHNRVfgctiUvzKqYTJkLxpZXIjQW",
