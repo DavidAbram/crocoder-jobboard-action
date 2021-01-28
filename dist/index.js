@@ -95,7 +95,7 @@ Dear CroCoder devs please merge this to archive jobs.
       owner,
       repo,
       pull_number: number,
-      reviewers: [asignees[index]]
+      reviewers: [asignees[0]]
     });
     await wait(200);
 }
