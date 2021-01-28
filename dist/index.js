@@ -214,9 +214,6 @@ const { wait } = __webpack_require__(252);
     await wait(200);
     await exec('git', [ '-C', workingDirectory, 'config', '--local', 'user.email', authorEmail ]);
     await wait(200);
-    
-    await exec('git', [ '-C', workingDirectory, 'checkout', startingBranch]);
-    await wait(200);
 
     switch (command) {
       case 'ARCHIVE_ALL':
