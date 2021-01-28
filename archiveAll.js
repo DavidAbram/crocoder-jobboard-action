@@ -69,12 +69,11 @@ module.exports = async (owner, repo, jobBoardApiUrl, jobBoardApiToken, workingDi
     const prResponse = await octokit.pulls.create({
       owner,
       repo,
-      title,
+      title: `${archiveCommitMessage} ${new Date().toLocaleDateString()}`,
       head: branch,
       base: startingBranch,
       body: `
-# ${title}
-### ${hashtags.join(' ')}
+# ${archiveCommitMessage} ${new Date().toLocaleDateString()}
       
 Dear CroCoder devs please merge this to archive jobs.
       `,
