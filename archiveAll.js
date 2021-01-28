@@ -9,7 +9,7 @@ const nanoid = customAlphabet(
 );
 const { wait, createAsigneeList } = require('./utils');
 
-module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken) => {
+module.exports = async (owner, repo, jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken) => {
 
   const octokit = new Octokit({
     auth: githubToken,

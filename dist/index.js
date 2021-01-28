@@ -16,7 +16,7 @@ const nanoid = customAlphabet(
 );
 const { wait, createAsigneeList } = __webpack_require__(252);
 
-module.exports = async (jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken) => {
+module.exports = async (owner, repo, jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken) => {
 
   const octokit = new Octokit({
     auth: githubToken,
@@ -272,7 +272,7 @@ const { wait } = __webpack_require__(252);
 
     switch (command) {
       case 'ARCHIVE_ALL':
-        await archiveAll(jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken);
+        await archiveAll(owner, repo,jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken);
         break;
       case 'GET':
       default:

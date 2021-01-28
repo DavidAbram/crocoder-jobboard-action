@@ -32,7 +32,7 @@ const { wait } = require('./utils');
 
     switch (command) {
       case 'ARCHIVE_ALL':
-        await archiveAll(jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken);
+        await archiveAll(owner, repo,jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken);
         break;
       case 'GET':
       default:
