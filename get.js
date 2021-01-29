@@ -52,6 +52,7 @@ module.exports = async (owner, repo, branchPrefix, workingDirectory, releaseBran
 
 
     const response = await octokit.pulls.create({
+      workingDirectory,
       owner,
       repo,
       title,
