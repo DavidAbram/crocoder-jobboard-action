@@ -115,7 +115,7 @@ module.exports = {
 /***/ }),
 
 /***/ 200:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 const { exec } = __webpack_require__(514);
 const { customAlphabet } = __webpack_require__(140);
@@ -129,7 +129,7 @@ const { wait, createAsigneeList } = __webpack_require__(252);
 const { archiveJobs } = __webpack_require__(319);
 
 
-const allValue = async (owner, repo, workingDirectory, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
+module.exports = async (owner, repo, workingDirectory, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
   const result = await fetch(jobBoardApiUrl, {
     "method": "GET",
     "headers": {
@@ -137,12 +137,6 @@ const allValue = async (owner, repo, workingDirectory, branchPrefix, releaseBran
     }
   });
   await wait(200);
-
-  try {
-    console.log(result)
-  } catch (err) {
-    console.log('error:', err)
-  }
 
   const { published, archived } = await result.json();
 
@@ -252,9 +246,6 @@ Changed featured if needed | ✔️ / ❌ |
   await archiveJobs(archived, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch)
 }
 
-
-
-allValue();
 
 /***/ }),
 
