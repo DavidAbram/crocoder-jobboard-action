@@ -36,7 +36,7 @@ const { wait } = require('./utils');
         break;
       case 'GET':
       default:
-        await get(owner, repo, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage);
+        await get(owner, repo, workingDirectory, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage);
         break;
     }
   } catch (error) {
