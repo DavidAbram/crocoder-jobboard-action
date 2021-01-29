@@ -10,7 +10,7 @@ const { wait, createAsigneeList } = require('./utils');
 const { archiveJobs } = require('./archiveAll');
 
 
-module.exports = async (owner, repo, branchPrefix, workingDirectory, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
+module.exports = async (owner, repo, workingDirectory, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
   const result = await fetch(jobBoardApiUrl, {
     "method": "GET",
     "headers": {
