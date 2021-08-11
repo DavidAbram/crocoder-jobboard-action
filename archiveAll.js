@@ -11,9 +11,8 @@ const { wait, createAsigneeList } = require('./utils');
 
 const archiveJobs = async (data, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch) => {
   const markdownsToArchive = data.map((t) => {
-    const strings = t.jobPostMarkdown.split("/");
     return {
-      fileName: `${workingDirectory}/${pathToContentFolder}/${strings[strings.length - 1]}`,
+      fileName: `${workingDirectory}/${pathToContentFolder}/${t.jobPostFilename}`,
       url: t.url,
     };
   });
