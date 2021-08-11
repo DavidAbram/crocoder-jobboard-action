@@ -19,7 +19,7 @@ const archiveJobs = async (data, octokit, owner, repo, workingDirectory, pathToC
 
   const asignees = createAsigneeList(asigneeUsernames.split(','), 1);
 
-  const branch = `${archiveBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
+  const branch = `${archiveBranchPrefix}/${nanoid()}`;
   const fullCommitMessage = `${archiveCommitMessage}`;
 
   await exec('git', ['-C', workingDirectory, 'branch', branch]);
