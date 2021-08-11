@@ -9,17 +9,24 @@ const nanoid = customAlphabet(
 const { wait, createAsigneeList } = require('./utils');
 const { archiveJobs } = require('./archiveAll');
 
-
-module.exports = async (owner, repo, workingDirectory, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
-  const result = await fetch(jobBoardApiUrl, {
+const getJobs = async (url, token) => {
+  const result = await fetch(url, {
     "method": "GET",
     "headers": {
-      "authorization": jobBoardApiToken,
+      "authorization": token,
     }
   });
   await wait(200);
 
   const { published, archived } = await result.json();
+
+  return { published, archived }; 
+}
+
+
+module.exports = async (owner, repo, workingDirectory, branchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
+  
+  const { published, archived } = await getJobs(jobBoardApiUrl, jobBoardApiToken);
 
   const octokit = new Octokit({
     auth: githubToken,
@@ -30,7 +37,7 @@ module.exports = async (owner, repo, workingDirectory, branchPrefix, releaseBran
   const asignees = createAsigneeList(asigneeUsernames.split(','), published.length);
 
   for (let index = 0; index < published.length; index++) {
-    const { title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
+    const { url, title, jobPostMarkdown, jobPostFilename, titleCompany, hashtags } = published[index];
 
     const branch = `${branchPrefix}/${titleCompany}-${nanoid()}`;
     const fullCommitMessage = `${commitMessage} ${title}`;
@@ -107,19 +114,16 @@ Changed featured if needed | ✔️ / ❌ |
       branch,
       number,
     });
+
+    await fetch(`${jobBoardApiUrl}/download`, {
+      "method": "PUT",
+      "headers": {
+        "authorization": jobBoardApiToken,
+      },
+      body: JSON.stringify({ urls: [url] }),
+    });
+    await wait(200);
   }
-
-  const releaseBranch = `${releaseBranchPrefix}/${new Date().toISOString().split('T')[0]}-${nanoid()}`;
-
-  await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
-  await wait(200);
-
-  await exec('git', ['-C', workingDirectory, 'branch', releaseBranch]);
-  await wait(200);
-  await exec('git', ['-C', workingDirectory, 'checkout', releaseBranch]);
-  await wait(200);
-  await exec('git', ['-C', workingDirectory, 'push', '--set-upstream', 'origin', releaseBranch]);
-  await wait(200);
 
   await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
   await wait(200);

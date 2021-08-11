@@ -30,10 +30,6 @@ inputs:
     description: 'Branch prefix (prefix/)'
     required: false
     default: jobpost
-  release-branch-prefix:
-    description: 'Release branch prefix (prefix/)'
-    required: false
-    default: release
   archive-branch-prefix:
     description: 'Archive branch prefix (prefix/)'
     required: false

@@ -42,7 +42,7 @@ const archiveJobs = async (data, octokit, owner, repo, workingDirectory, pathToC
         );
         archivedMarkdownUrls.push(url);
       }
-    } catch (err) {}
+    } catch (err) { }
   });
 
   await wait(200);
@@ -88,14 +88,19 @@ const archiveAllJobs = async (owner, repo, jobBoardApiUrl, jobBoardApiToken, wor
     auth: githubToken,
   });
 
+  await fetch(`${jobBoardApiUrl}/archive`, {
+    method: "POST",
+    headers: { Authorization: jobBoardApiToken },
+  });
+
   let url = `${jobBoardApiUrl}/archive`;
-    let options = {
-      method: "GET",
-      headers: { Authorization: jobBoardApiToken },
-    };
-    const response = await fetch(url, options);
-    const data = await response.json();
-    await archiveJobs(data, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch);
+  let options = {
+    method: "GET",
+    headers: { Authorization: jobBoardApiToken },
+  };
+  const response = await fetch(url, options);
+  const data = await response.json();
+  await archiveJobs(data, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch);
 }
 
 

@@ -11,7 +11,6 @@ const { wait } = require('./utils');
     const authorName = core.getInput('author-name');
     const authorEmail = core.getInput('author-email');
     const branchPrefix = core.getInput('branch-prefix');
-    const releaseBranchPrefix = core.getInput('release-branch-prefix');
     const archiveBranchPrefix = core.getInput('archive-branch-prefix')
     const commitMessage = core.getInput('commit-message');
     const archiveCommitMessage = core.getInput('archive-commit-message');
@@ -36,7 +35,7 @@ const { wait } = require('./utils');
         break;
       case 'GET':
       default:
-        await get(owner, repo, workingDirectory, branchPrefix, releaseBranchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage);
+        await get(owner, repo, workingDirectory, branchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage);
         break;
     }
   } catch (error) {
