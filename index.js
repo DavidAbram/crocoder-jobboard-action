@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const { exec } = require('@actions/exec');
 const get = require('./get');
-const { archiveAll } = require('./archiveAll');
+const { archiveAllJobs } = require('./archiveAll');
 const { wait } = require('./utils');
 
 
@@ -31,7 +31,7 @@ const { wait } = require('./utils');
 
     switch (command) {
       case 'ARCHIVE_ALL':
-        await archiveAll(owner, repo,jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken);
+        await archiveAllJobs(owner, repo,jobBoardApiUrl, jobBoardApiToken, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch, githubToken);
         break;
       case 'GET':
       default:
