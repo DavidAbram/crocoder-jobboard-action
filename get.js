@@ -126,7 +126,9 @@ Changed featured if needed | ✔️ / ❌ |
   }
 
   await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
-  await wait(200);
+  await wait(200);3
 
-  await archiveJobs(archived, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch)
+  if(archived.length > 0) {
+    await archiveJobs(archived, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch);
+  }
 }
