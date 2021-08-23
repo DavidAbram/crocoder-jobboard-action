@@ -149,7 +149,7 @@ const getJobs = async (url, token) => {
 
 module.exports = async (owner, repo, workingDirectory, branchPrefix, commitMessage, githubToken, pathToContentFolder, jobBoardApiUrl, jobBoardApiToken, asigneeUsernames, startingBranch, archiveBranchPrefix, archiveCommitMessage) => {
   
-  const { published, archived } = await getJobs(jobBoardApiUrl, jobBoardApiToken);
+  const { published, archived } = await getJobs(`${jobBoardApiUrl}/urls`, jobBoardApiToken);
 
   const octokit = new Octokit({
     auth: githubToken,
@@ -238,13 +238,18 @@ Changed featured if needed | ✔️ / ❌ |
       number,
     });
 
-    await fetch(`${jobBoardApiUrl}/download`, {
-      "method": "PUT",
-      "headers": {
-        "authorization": jobBoardApiToken,
-      },
-      body: JSON.stringify({ urls: [url] }),
+    const downloadResponse = await fetch(`${jobBoardApiUrl}/urls/download`, {
+        "method": "PUT",
+        "headers": {
+          "authorization": jobBoardApiToken,
+        },
+        body: JSON.stringify({ urls: [url] }),
     });
+
+    if(!downloadResponse.ok) {
+      console.log(downloadResponse.statusText);
+    }
+
     await wait(200);
   }
 
