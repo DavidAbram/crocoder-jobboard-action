@@ -119,6 +119,7 @@ Changed featured if needed | ✔️ / ❌ |
         "method": "PUT",
         "headers": {
           "authorization": jobBoardApiToken,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ urls: [url] }),
     });
