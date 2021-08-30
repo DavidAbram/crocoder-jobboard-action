@@ -118,7 +118,7 @@ Changed featured if needed | ✔️ / ❌ |
     const downloadResponse = await fetch(`${jobBoardApiUrl}/urls/download`, {
         "method": "PUT",
         "headers": {
-          "Authorization": jobBoardApiToken,
+          "authorization": jobBoardApiToken,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ urls: [url] }),
