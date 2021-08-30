@@ -128,11 +128,11 @@ Changed featured if needed | ✔️ / ❌ |
       console.log(downloadResponse.statusText);
     }
 
-    await wait(200);
+    await wait(1000);
   }
 
   await exec('git', ['-C', workingDirectory, 'checkout', startingBranch]);
-  await wait(200);3
+  await wait(200);
 
   if(archived.length > 0) {
     await archiveJobs(archived, octokit, owner, repo, workingDirectory, pathToContentFolder, archiveBranchPrefix, archiveCommitMessage, asigneeUsernames, startingBranch);
