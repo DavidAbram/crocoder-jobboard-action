@@ -13,7 +13,7 @@ const getJobs = async (url, token) => {
   const result = await fetch(url, {
     "method": "GET",
     "headers": {
-      "authorization": token,
+      "Authorization": token,
     }
   });
   await wait(200);
@@ -115,17 +115,17 @@ Changed featured if needed | ✔️ / ❌ |
       number,
     });
 
-    const downloadResponse = await fetch(`${jobBoardApiUrl}/urls/download`, {
+    const publishResponse = await fetch(`${jobBoardApiUrl}/urls/publish`, {
         "method": "PUT",
         "headers": {
-          "authorization": jobBoardApiToken,
+          "Authorization": jobBoardApiToken,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ urls: [url] }),
     });
 
-    if(!downloadResponse.ok) {
-      console.log(downloadResponse.statusText);
+    if(!publishResponse.ok) {
+      console.log(publishResponse.statusText);
     }
 
     await wait(1000);
